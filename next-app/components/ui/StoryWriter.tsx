@@ -7,7 +7,7 @@ import {
   SelectContent,
   SelectItem,
 } from "./select";
-import { Textarea } from "./textarea";
+import { Textarea } from "./Textarea";
 import { Button } from "./button";
 import { useState } from "react";
 function StoryWriter() {
@@ -18,22 +18,30 @@ function StoryWriter() {
   //allstate for the progress of the story
   const [progress, setProgress] = useState<string>("");
   const [runFinished, setRunFinished] = useState<boolean | null>(null);
-  const [runStarted, setRunStarted] = useState<boolean>(true);
+  const [runStarted, setRunStarted] = useState<boolean>(false);
   const[currentTool, setCurrentTool] = useState("");
+  async function runScript() {
+    setRunStarted(true);
+    setRunFinished(false);
+    
+  }
+
+
+
   return (
     <div className="flex flex-col container ">
       <section className="flex-1 flex flex-col border border-purple-300 rounded-md p-12 ml-10 space-y-5">
         <Textarea
           value={story}
           onChange={(e) => setStory(e.target.value)}
-          className="flex-1 text-black"
+          className="flex-1 text-black text-lg"
           placeholder="Write a story about a human and robt who become friend..."
         />
 
         <Select onValueChange={(value) => setPages(parseInt(value))}>
           <SelectTrigger>
             <SelectValue
-              className="w-full"
+              className="w-full "
               placeholder="How many pages should the story be?"
             />
           </SelectTrigger>
@@ -46,8 +54,10 @@ function StoryWriter() {
           </SelectContent>
         </Select>
         <Button
-          disabled={!story || !pages}
+          disabled={!story || !pages ||runStarted}
+          onClick={runScript}
           className="w-full bg-purple-500 text-white hover:bg-purple-600 transition-colors duration-200"
+
         >
           Generate Story
         </Button>
@@ -73,7 +83,15 @@ function StoryWriter() {
           )}
 
           {/*render Events  */}
-          
+          {runStarted &&(
+
+            <div>
+              <span className="mr-5 animated-in">
+                {" ---[AI Storyteller Has started] ---"}
+              </span>
+              <br/>
+            </div>
+          )}
         </div>
       </section>
     </div>

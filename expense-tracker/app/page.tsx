@@ -1,11 +1,12 @@
-import Image from "next/image";
-
-export default function Home() {
-  return (
+import { currentUser } from "@clerk/nextjs/server";
+import Guest from "@/component/Guest";
+export default async function Home() {
+  const  user= await currentUser ();
+     if(!user)
+       return <Guest/>;
+    return (
     <main>
-      <h1>home page
-        
-      </h1>
+      
     </main>
   );
 }
